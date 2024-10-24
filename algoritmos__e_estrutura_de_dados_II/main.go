@@ -25,10 +25,10 @@ type Category struct {
 type Action uint8
 
 const (
-	View           Action = 1 << iota // 0001
-	Cart                              // 0010
-	RemoveFromCart                    // 0100
-	Purchase                          // 1000
+	VIEW             Action = 1 << iota // 0001
+	CART                                // 0010
+	REMOVE_FROM_CART                    // 0100
+	PURCHASE                            // 1000
 )
 
 const (
@@ -60,22 +60,22 @@ type IndexEntry struct {
 func getActionFromName(actionName string) Action {
 	switch actionName {
 	case "cart":
-		return Cart
+		return CART
 	case "remove_from_cart":
-		return RemoveFromCart
+		return REMOVE_FROM_CART
 	case "purchase":
-		return Purchase
+		return PURCHASE
 	default:
-		return View
+		return VIEW
 	}
 }
 func getActionName(action Action) string {
 	switch action {
-	case Cart:
+	case CART:
 		return "cart"
-	case RemoveFromCart:
+	case REMOVE_FROM_CART:
 		return "remove_from_cart"
-	case Purchase:
+	case PURCHASE:
 		return "purchase"
 	default:
 		return "view"
