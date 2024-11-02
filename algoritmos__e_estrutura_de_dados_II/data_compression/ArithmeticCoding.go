@@ -28,15 +28,15 @@ func CalcCharsOdds(text string) map[rune]float64 {
 	return odds
 }
 
-func CalcInterval(odds map[rune]float64, char rune) [2]float64 {
+func CalcInterval(odds map[rune]float64, targetChar rune) (float64, float64) {
 	low := 0.0
-	for c, odd := range odds {
-		if c == char {
-			return [2]float64{low, low + odd}
+	for char, odd := range odds {
+		if char == targetChar {
+			return low, low + odd
 		}
 		low += odd
 	}
-	return [2]float64{0, 0}
+	return 0, 0
 }
 
 func Encode(text string, odds map[rune]float64) (float64, float64) {
@@ -44,9 +44,9 @@ func Encode(text string, odds map[rune]float64) (float64, float64) {
 
 	for _, char := range text {
 		rangeWidth := high - low
-		lowHigh := CalcInterval(odds, char)
-		high = low + rangeWidth*lowHigh[1]
-		low = low + rangeWidth*lowHigh[0]
+		lowInterval, highInterval := CalcInterval(odds, char)
+		high = low + rangeWidth*highInterval
+		low = low + rangeWidth*lowInterval
 	}
 
 	return low, high
@@ -59,10 +59,10 @@ func Decode(data EncodedData, size int) string {
 
 	for i := 0; i < size; i++ {
 		for char := range odds {
-			lowHigh := CalcInterval(odds, char)
-			if code >= lowHigh[0] && code < lowHigh[1] {
+			low, high := CalcInterval(odds, char)
+			if code >= low && code < high {
 				result += string(char)
-				code = (code - lowHigh[0]) / (lowHigh[1] - lowHigh[0])
+				code = (code - low) / (high - low)
 				break
 			}
 		}
