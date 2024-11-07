@@ -112,7 +112,7 @@ func readEncodedDataFile(path string) (EncodedData, error) {
 }
 
 func main() {
-	text, err := readTextFile("myText.txt")
+	text, err := readTextFile("highEntropy.txt")
 	if err != nil {
 		fmt.Printf("Error reading text file: %v\n", err)
 		return
